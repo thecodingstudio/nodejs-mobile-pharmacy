@@ -1,0 +1,14 @@
+# Module Dependencies
+/node_modules
+
+----------------------
+# JSON
+package-lock.json
+
+----------------------
+# Environment Variables
+/nodemon.json
+
+----------------------
+# Heroku deployment file
+Procfiles
