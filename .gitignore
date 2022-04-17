@@ -12,3 +12,7 @@ package-lock.json
 ----------------------
 # Heroku deployment file
 Procfiles
+
+----------------------
+# Firebase admin config
+firebase_config.json
