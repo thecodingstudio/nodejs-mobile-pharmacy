@@ -207,7 +207,7 @@ exports.createPrescription = async (req, res, next) => {
                         body: prescription.text_note
                     }
                 };
-                console.log(message_notification);
+                
                 /*
                  * Send notification to all active pharmacy.
                  * Store notification, sender, receiver, etc. details in database. 
@@ -220,7 +220,7 @@ exports.createPrescription = async (req, res, next) => {
                     // Map element with id.
                     const pharmacist_userId = pharmacist.map(element => element.id);
 
-
+                    console.log(pharmacist_userId);
                     // Srore and send notifications.
                     for (let i = 0; i < pharmacist_userId.length; i++) {
 
