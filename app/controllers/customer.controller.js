@@ -205,9 +205,6 @@ exports.createPrescription = async (req, res, next) => {
                     notification: {
                         title: prescription.name,
                         body: prescription.text_note
-                    },
-                    data: {
-                        ...resMed.map(element => element.name)
                     }
                 };
 
