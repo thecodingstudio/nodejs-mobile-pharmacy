@@ -219,7 +219,6 @@ exports.createPrescription = async (req, res, next) => {
                 // Map element with id.
                 const pharmacist_userId = pharmacist.map(element => element.id);
 
-                console.log(pharmacist_userId);
                 // Srore and send notifications.
                 for (let i = 0; i < pharmacist_userId.length; i++) {
 
@@ -234,8 +233,7 @@ exports.createPrescription = async (req, res, next) => {
                         userId: req.user.id
                     }
 
-                    const noty = await Notification.create(payload);
-                    console.log(noty);
+                    await Notification.create(payload);
                 }
 
                 // Send response.
