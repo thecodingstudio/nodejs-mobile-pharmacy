@@ -28,7 +28,7 @@ const Address = sequelize.define('address', {
         defaultValue : 72.833771
     },
     is_test: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.TINYINT(1),
         defaultValue: 1
     },
     is_verify: {

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const User = require('../models/user');
 const Store = require('../models/store');
 const Quote = require('../models/quote');
@@ -9,6 +10,7 @@ const Prescription = require('../models/prescription');
 const Prescription_image = require('../models/prescription_image');
 
 const notification = require('../services/notification');
+const path = require('path');
 
 
 /*
@@ -143,7 +145,7 @@ exports.createPrescription = async (req, res, next) => {
                     // Push image in image_list
                     image_list.push({
                         name: req.files[i].originalname,
-                        url: req.files[i].url,
+                        url: req.files[i].path,
                         type: req.files[i].mimetype,
                         prescriptionId: prescription.id
                     });
@@ -232,7 +234,8 @@ exports.createPrescription = async (req, res, next) => {
                             sender: req.user.name,
                             title: prescription.name,
                             body: prescription.text_note,
-                            receiver: pharmacist[i].name
+                            receiver: pharmacist[i].name,
+                            userId: req.user.id
                         }
 
                         await Notification.create(payload);
@@ -382,7 +385,7 @@ exports.deletePrescription = (req, res, next) => {
 
             // Delete prescription's all images.
             for (let i = 0; i < images.length; i++) {
-                clearImage(images[i].path)
+                clearImage(images[i].url)
             }
 
             // Delete prescription to database.
@@ -443,11 +446,11 @@ exports.get = async (req, res, next) => {
 
         // Send success response.
         return res.status(200).json({
-            message : "Prescription fetched successfully.",
+            message: "Prescription fetched successfully.",
             data: prescription
         });
 
-    } 
+    }
     catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;

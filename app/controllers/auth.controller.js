@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const stripe = require('stripe')(process.env.STRIPE_SK);
-
+const { Op } = require('@sequelize/core');
 
 // Import models.
 const User = require('../models/user');
@@ -16,6 +16,7 @@ let tokenList = {};
  * Regiser new user.
  * Check whether user is already exist or not.
  * If not then creat new user.
+ * Create customer on Stripe.
 */
 exports.Register = (req, res, next) => {
 
@@ -46,7 +47,7 @@ exports.Register = (req, res, next) => {
 
                 // Check whether user is customer or pharmacist.
                 try {
-                    if (payload.role === 2) {
+                    if (parseInt(new_user.role) === 2) {
                         const payload = {
                             store_name: req.body.store_name,
                             license_id: req.body.license_id,
@@ -69,7 +70,7 @@ exports.Register = (req, res, next) => {
 
                             // Store stripe id for user in database.
                             new_user.stripe_id = customer.id;
-                            await user.save();
+                            await new_user.save();
 
                             // Send response for created pharmacist.
                             return res.status(200).json({
@@ -100,13 +101,13 @@ exports.Register = (req, res, next) => {
                 // Create stripe customer account for normal user.
                 try {
                     const customer = await stripe.customers.create({
-                        name: user.name,
-                        email: user.email,
-                        phone: user.mobile,
+                        name: new_user.name,
+                        email: new_user.email,
+                        phone: new_user.mobile,
                         description: 'I am customer',
                     });
-                    user.stripe_id = customer.id;
-                    await user.save();
+                    new_user.stripe_id = customer.id;
+                    await new_user.save();
 
                     // Send response for created customer.
                     return res.status(200).json({

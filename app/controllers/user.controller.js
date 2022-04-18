@@ -8,7 +8,7 @@ const Address = require('../models/address');
 exports.getProfile = (req, res, next) => {
 
     // Find user through email.
-    User.findOne({ where: { email: req.body.email } })
+    User.findOne({ where: { email: req.user.email } })
         .then(async user => {
 
             // Chech whether user is exist or not.
@@ -69,7 +69,7 @@ exports.updateProfile = (req, res, next) => {
     const postData = req.body;
 
     // // Find user through email.
-    User.findOne({ where: { email: postData.email } })
+    User.findOne({ where: { email: req.user.email } })
         .then(async user => {
 
             // Chech whether user is exist or not.
@@ -245,7 +245,7 @@ exports.deleteAddress = (req, res, next) => {
 exports.getAddress = (req, res, next) => {
 
     // // Find address through user id.
-    Address.findAll({ where: { userId: req.params.userId } })
+    Address.findAll({ where: { userId: req.user.id } })
         .then(addresses => {
 
             // Check whether addresses are exist or not.

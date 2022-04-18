@@ -6,7 +6,7 @@ const userConroller = require('../controllers/user.controller');
 
 router.use(cors());
 
-router.post('/getProfile', authUser, userConroller.getProfile);
+router.get('/getProfile', authUser, userConroller.getProfile);
 
 router.post('/updateProfile', authUser, userConroller.updateProfile);
 
@@ -16,6 +16,6 @@ router.post('/updateAddress/:id', authUser, userConroller.updateAddress);
 
 router.delete('/deleteAddress/:id', authUser, userConroller.deleteAddress);
 
-router.get('/getAddress/:userId', authUser, userConroller.getAddress);
+router.get('/getAddress', authUser, userConroller.getAddress);
 
 module.exports = router;

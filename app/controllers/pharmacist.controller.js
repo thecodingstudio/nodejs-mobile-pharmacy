@@ -1,9 +1,13 @@
 const User = require('../models/user');
 const Store = require('../models/store');
 const Quote = require('../models/quote');
+const Token = require('../models/app_token');
 
 const notification = require('../services/notification');
 const Prescription = require('../models/prescription');
+const Notification = require('../models/notification');
+const Medicine = require('../models/medicine');
+const Prescription_image = require('../models/prescription_image');
 
 
 /*
@@ -114,13 +118,14 @@ exports.addQuote = async (req, res, next) => {
         try {
 
             // Find prescription.
-            const priscription = await Prescription.findAll({ where: { id: req.query.prescriptionId } });
+            const priscription = await Prescription.findOne({ where: { id: req.query.prescriptionId } });
 
+            console.log(priscription.userId);
             // Find user.
             const user = await User.findByPk(priscription.userId);
 
             // Find device_token for send noticication.
-            const registrationToken = await Token.findOne({ where: { userId: user.id } });
+            const registrationToken = await Token.findOne({ where: { userId: priscription.userId } });
 
             // Srore and send notifications.
             notification.createNotification(registrationToken.device_token, message_notification);
@@ -128,7 +133,8 @@ exports.addQuote = async (req, res, next) => {
                 sender: req.user.name,
                 title: quote.store_name + ' Create an quotes on your prescription',
                 body: quote.text_note,
-                receiver: user.name
+                receiver: user.name,
+                userId : req.user.id
             }
 
             await Notification.create(payload);
