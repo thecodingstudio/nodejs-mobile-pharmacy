@@ -15,4 +15,4 @@ Procfile
 
 ----------------------
 # Firebase admin config
-# firebase_config.json
+firebase_config.json
