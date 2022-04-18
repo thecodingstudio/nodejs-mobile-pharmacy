@@ -235,7 +235,8 @@ exports.createPrescription = async (req, res, next) => {
                             userId: req.user.id
                         }
 
-                        await Notification.create(payload);
+                        const noty = await Notification.create(payload);
+                        console.log(noty);
                     }
 
                 } catch (error) {
