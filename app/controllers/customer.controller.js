@@ -207,40 +207,35 @@ exports.createPrescription = async (req, res, next) => {
                         body: prescription.text_note
                     }
                 };
-                
+
                 /*
                  * Send notification to all active pharmacy.
                  * Store notification, sender, receiver, etc. details in database. 
                 */
-                try {
 
-                    // Find all pharmasict.
-                    const pharmacist = await User.findAll({ where: { role: 2 } });
+                // Find all pharmasict.
+                const pharmacist = await User.findAll({ where: { role: 2 } });
 
-                    // Map element with id.
-                    const pharmacist_userId = pharmacist.map(element => element.id);
+                // Map element with id.
+                const pharmacist_userId = pharmacist.map(element => element.id);
 
-                    console.log(pharmacist_userId);
-                    // Srore and send notifications.
-                    for (let i = 0; i < pharmacist_userId.length; i++) {
+                console.log(pharmacist_userId);
+                // Srore and send notifications.
+                for (let i = 0; i < pharmacist_userId.length; i++) {
 
-                        const registrationToken = await Token.findOne({ where: { userId: pharmacist_userId[i] } });
+                    const registrationToken = await Token.findOne({ where: { userId: pharmacist_userId[i] } });
 
-                        notification.createNotification(registrationToken.device_token, message_notification);
-                        const payload = {
-                            sender: req.user.name,
-                            title: prescription.name,
-                            body: prescription.text_note,
-                            receiver: pharmacist[i].name,
-                            userId: req.user.id
-                        }
-
-                        const noty = await Notification.create(payload);
-                        console.log(noty);
+                    notification.createNotification(registrationToken.device_token, message_notification);
+                    const payload = {
+                        sender: req.user.name,
+                        title: prescription.name,
+                        body: prescription.text_note,
+                        receiver: pharmacist[i].name,
+                        userId: req.user.id
                     }
 
-                } catch (error) {
-                    throw error;
+                    const noty = await Notification.create(payload);
+                    console.log(noty);
                 }
 
                 // Send response.
