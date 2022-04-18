@@ -207,7 +207,7 @@ exports.createPrescription = async (req, res, next) => {
                         body: prescription.text_note
                     }
                 };
-
+                console.log(message_notification);
                 /*
                  * Send notification to all active pharmacy.
                  * Store notification, sender, receiver, etc. details in database. 
