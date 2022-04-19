@@ -197,6 +197,7 @@ exports.Login = (req, res, next) => {
                             return res.status(200).json({
                                 message: 'Logged-in successfully..',
                                 data: {
+                                    role : user.role,
                                     name: user.name,
                                     token: accessToken,
                                     refreshToken: refreshToken
