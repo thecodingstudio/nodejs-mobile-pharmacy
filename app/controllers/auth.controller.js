@@ -405,7 +405,7 @@ exports.forgotPassword = (req, res, next) => {
                         subject: 'Password Reset Link!',
                         html: `
                     <p>You request password reset</p>
-                    <p>Click this <a href="http://localhost:8000/resetPassword/${token}">link</a> to reset new password.</p>
+                    <p>Click this <a href="https://mobile-pharmacy.herokuapp.com/resetPassword/${token}">link</a> to reset new password.</p>
                     <p>resetToken = ${token}</p>
                   `
                     });
@@ -453,7 +453,7 @@ exports.getNewPassword = (req, res, next) => {
 
             // Cheak Whether user exist or not.
             if (!user) {
-                const error = new Error('User not exists!');
+                const error = new Error('Invalid reset token!');
                 error.statusCode = 404;
                 throw error;
             }
