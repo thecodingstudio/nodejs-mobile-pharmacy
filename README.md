@@ -2,16 +2,17 @@
  
 API end-points for `Mobile Pharmacy` App.
 
+## Deployment
+
+- Heroku :- https://mobile-pharmacy.herokuapp.com/
+- AWS    :- http://ec2-54-92-221-161.compute-1.amazonaws.com:8000/
+
 ## Installation
 
 Pharmacy App requires [Node.js](https://nodejs.org/) v17+ to run.
 
 Install the dependencies and devDependencies and start the server.
 
-## Deployment
-
-- Heroku :- https://mobile-pharmacy.herokuapp.com/
-- AWS    :- http://ec2-54-92-221-161.compute-1.amazonaws.com:8000/
 
 ```sh
 cd Mobile-Pharmacy
