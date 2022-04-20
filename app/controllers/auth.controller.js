@@ -420,7 +420,6 @@ exports.forgotPassword = (req, res, next) => {
                     <p><p>
                     <p>Sincerely,<p>
                     <p>The Amazon Web Service Team<p>
-
                   `
                     });
 

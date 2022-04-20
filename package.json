@@ -36,10 +36,10 @@
         "nodemailer-sendgrid-transport": "^0.2.0",
         "sequelize": "^6.17.0",
         "stripe": "^8.217.0",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "dotenv": "^16.0.0"
     },
     "devDependencies": {
-        "dotenv": "^16.0.0",
         "nodemon": "^2.0.15"
     }
 }
