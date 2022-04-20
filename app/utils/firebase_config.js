@@ -1,3 +1,4 @@
+require('dotenv').config();
 var admin = require("firebase-admin");
 
 var serviceAccount = require("../../firebase_config.json");

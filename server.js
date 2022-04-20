@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+require('dotenv').config();
 
 // Define express server amd port.
 const app = express();
