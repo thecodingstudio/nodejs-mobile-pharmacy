@@ -7,7 +7,7 @@ require('dotenv').config();
 
 // Define express server amd port.
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 // Importing routes.
 const auth_route = require('./app/routes/auth.route');
