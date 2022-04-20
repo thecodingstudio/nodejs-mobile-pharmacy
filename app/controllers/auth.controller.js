@@ -403,11 +403,24 @@ exports.forgotPassword = (req, res, next) => {
                     transporter.sendMail({
                         to: req.body.email,
                         from: 'admin@gmail.com',
-                        subject: 'Password Reset Link!',
+                        subject: 'Mobile Pharmacy Password Assistance',
                         html: `
-                    <p>You request password reset</p>
-                    <p>Click this <a href="https://mobile-pharmacy.herokuapp.com/resetPassword/${token}">link</a> to reset new password.</p>
-                    <p>resetToken = ${token}</p>
+                    <p>Greeting from Mobile Pharmacy,</p>
+                    <p><p>
+                    <p>We received a request to reset the password for the Mobile Pharmacy account associated with this e-mail address. Click the link below to reset your password using our secure server:<p>
+                    <p><p>
+                    <p><a href="https://mobile-pharmacy.herokuapp.com/resetPassword/${token}">https://mobile-pharmacy.herokuapp.com/resetPassword/${token}</a></p>
+                    <p><p>
+                    <p>If clicking the link doesn't work, you can copy and paste the link into your web browser's address bar. You will be able to create a new password for your AWS account after clicking the link above.<p>
+                    <p><p>
+                    <p>Mobile Pharmacy will never email you and ask you to disclose or verify your password, credit card, or banking account number. If you receive a suspicious email with a link to update your account information, do not click on the link. Instead, report the e-mail to Mobile Pharmacy for investigation.<p>
+                    <p>For help and support, visit the Mobile Pharmacy Support Center at <a href="https://www.thecodingstidio.in/support">https://www.thecodingstudio.in/support<a>.<p>
+                    <p><p>
+                    <p>Thank you for using Amazon Web Services.<p>
+                    <p><p>
+                    <p>Sincerely,<p>
+                    <p>The Amazon Web Service Team<p>
+
                   `
                     });
 
