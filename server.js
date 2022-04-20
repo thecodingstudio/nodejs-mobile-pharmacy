@@ -6,7 +6,7 @@ const path = require('path');
 
 // Define express server amd port.
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 // Importing routes.
 const auth_route = require('./app/routes/auth.route');
