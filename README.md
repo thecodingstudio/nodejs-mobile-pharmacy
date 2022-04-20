@@ -4,8 +4,8 @@ API end-points for `Mobile Pharmacy` App.
 
 ## Deployment
 
-- Heroku :- [Go to on live apis](https://mobile-pharmacy.herokuapp.com/)
-- AWS    :- [Go to on live apis](http://ec2-54-92-221-161.compute-1.amazonaws.com:8000/)
+- Heroku :- https://mobile-pharmacy.herokuapp.com/
+- AWS    :- http://ec2-54-92-221-161.compute-1.amazonaws.com:8000/
 
 ## Installation
 
