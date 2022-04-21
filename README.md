@@ -1,6 +1,8 @@
 # Mobile Pharmacy App Backend
  
 API end-points for `Mobile Pharmacy` App.
+- [AWS](http://ec2-35-174-166-20.compute-1.amazonaws.com)
+- [Herou](https://pharmacy-backend-tcs.herokuapp.com/)
 
 ## Installation
 
