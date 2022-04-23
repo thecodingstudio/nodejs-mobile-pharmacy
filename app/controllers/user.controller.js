@@ -125,6 +125,7 @@ exports.postAddress = async (req, res, next) => {
         address_type: req.body.address_type || 0,
         latitude: req.body.latitude || 21.228125,
         longitude: req.body.longitude || 72.833771,
+        is_select : req.body.is_select,
         userId: req.user.id
     }
 
@@ -172,6 +173,7 @@ exports.updateAddress = (req, res, next) => {
                 address.address_type = req.body.address_type || address.address_type;
                 address.latitude = req.body.latitude || address.latitude;
                 address.longitude = req.body.longitude || address.longitude;
+                address.is_select = req.body.is_select || address.is_select;
 
                 // save updated address.
                 await address.save();

@@ -46,6 +46,9 @@ const User = sequelize.define('user', {
         type: Sequelize.BIGINT(20),
         defaultValue: null
     },
+    stripe_id : {
+        type : Sequelize.TEXT
+    },
     is_test: {
         type: Sequelize.TINYINT(1),
         defaultValue: 1

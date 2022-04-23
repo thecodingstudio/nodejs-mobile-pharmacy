@@ -3,7 +3,7 @@
 
 ----------------------
 # JSON
-package-lock.json
+# package-lock.json
 
 ----------------------
 # Environment Variables
@@ -16,3 +16,7 @@ package-lock.json
 ----------------------
 # Firebase admin config
 # firebase_config.json
+
+-----------------------
+# Docker
+# Dockerfile

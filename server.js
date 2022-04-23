@@ -76,6 +76,9 @@ const Prescription_image = require('./app/models/prescription_image');
 const Medicine = require('./app/models/medicine');
 const Notification = require('./app/models/notification');
 const Quote = require('./app/models/quote');
+const Card = require('./app/models/card');
+const Order = require('./app/models/order');
+const Payment = require('./app/models/payment');
 
 Store.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 Token.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
@@ -86,6 +89,13 @@ Prescription.hasMany(Medicine, { constraints: true, onDelete: 'CASCADE' });
 Notification.belongsTo(User);
 Store.hasMany(Quote, { constraints: true, onDelete: 'CASCADE' });
 Prescription.hasMany(Quote);
+Order.belongsTo(User, { foreignKey: 'userId', targetKey: 'id' });
+Order.belongsTo(Store, { foreignKey: 'storeId', targetKey: 'id' });
+Order.belongsTo(Quote, { foreignKey: 'quoteId', targetKey: 'id' });
+Payment.belongsTo(User);
+Payment.belongsTo(Store);
+Payment.belongsTo(Order);
+Card.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 
 /*
  * Sync MySQL database.

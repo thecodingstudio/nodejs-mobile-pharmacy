@@ -2,19 +2,25 @@ const express = require('express');
 const cors = require('cors');
 const router = express.Router();
 const authUser = require('../middlewares/is-auth');
-const customerConroller = require('../controllers/customer.controller');
+const customerController = require('../controllers/customer.controller');
+const paymentController = require('../controllers/payment.controller');
 
 router.use(cors());
 
-router.get('/getNearByPharmacy', authUser, customerConroller.getNearByPharmacy);
+router.get('/getNearByPharmacy', authUser, customerController.getNearByPharmacy);
 
-router.post('/createPrescription', authUser, customerConroller.createPrescription);
+router.post('/createPrescription', authUser, customerController.createPrescription);
 
-router.get('/getPrescriptionsList', authUser, customerConroller.getPrescriptionsList);
+router.get('/getPrescriptionsList', authUser, customerController.getPrescriptionsList);
 
-router.delete('/deletePrescription/:id', customerConroller.deletePrescription);
+router.delete('/deletePrescription/:id', customerController.deletePrescription);
 
-router.get('/getPrescription', authUser, customerConroller.get);
+router.get('/getPrescription', authUser, customerController.get);
 
+router.post('/checkout', authUser, paymentController.checkout);
+
+router.post('/addCard',authUser, paymentController.addCard);
+
+router.get('/getCard', authUser, paymentController.getCard);
 
 module.exports = router;
