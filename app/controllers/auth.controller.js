@@ -198,7 +198,7 @@ exports.Login = (req, res, next) => {
                             return res.status(200).json({
                                 message: 'Logged-in successfully..',
                                 data: {
-                                    role : user.role,
+                                    role: user.role,
                                     name: user.name,
                                     token: accessToken,
                                     refreshToken: refreshToken
@@ -444,14 +444,51 @@ exports.forgotPassword = (req, res, next) => {
 
 }
 
+/*
+ * Forgot password controller.
+ * Get reset password link using valid reset token.
+*/
+exports.getNewPassword = async (req, res, next) => {
+
+    // Get token from params
+    const token = req.params.token;
+
+    // Check reset token is velid or not.
+    User.findOne({
+        where: {
+            resetToken: token,
+            resetTokenExpiration: { [Op.gt]: Date.now() }
+        } })
+        .then(user => {
+            res.render('auth/new-password', {
+                path: '/new-password',
+                pageTitle: 'New Password',
+                userId: user.id,
+                passwordToken: token
+            });
+        })
+        .catch(err => {
+            const error = new Error("Invalid reset token!");
+            error.httpStatusCode = 400;
+            return next(error);
+        });
+
+}
 
 /*
  * Forgot password controller.
  * Get new password using valid reset token.
 */
-exports.getNewPassword = (req, res, next) => {
+exports.postNewPassword = (req, res, next) => {
 
-    const token = req.params.token;
+    const newPassword = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    const token = req.body.passwordToken;
+
+    // Check whether password metched or not.
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ message: "Passwords does not match!" })
+    }
 
     // Find user with valid reset token.
     User.findOne({
@@ -464,24 +501,22 @@ exports.getNewPassword = (req, res, next) => {
     })
         .then(async user => {
 
-            // Cheak Whether user exist or not.
             if (!user) {
-                const error = new Error('Invalid reset token!');
+                const error = new Error('User not exists!');
                 error.statusCode = 404;
                 throw error;
             }
 
-            // Creating new encrypted password.
-            const hashedPassword = await bcrypt.hash(req.body.newPassword, 12);
+            // Encrypt new password.
+            const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
             user.password = hashedPassword;
             user.resetToken = null;
             user.resetTokenExpiration = null;
 
-            // Save user with new password.
+            // Save change to the database.
             await user.save();
 
-            // Send password reset success mail.
             transporter.sendMail({
                 to: user.email,
                 from: 'admin@gmail.com',
@@ -495,12 +530,12 @@ exports.getNewPassword = (req, res, next) => {
             return res.status(200).json({ message: 'Password Reset Successfully..' })
         })
         .catch(err => {
+            console.log(err);
             if (!err.statusCode) {
                 err.statusCode = 500;
             }
             next(err);
         });
-
 }
 
 /*
