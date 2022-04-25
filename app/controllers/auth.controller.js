@@ -228,7 +228,7 @@ exports.Login = (req, res, next) => {
 
                     // Sending success response.
                     return res.status(200).json({
-                        message: 'Logged-in successfully..',
+                        message: 'Logged-in successfully',
                         data: {
                             name: user.name,
                             token: accessToken,
