@@ -43,6 +43,7 @@ exports.Register = (req, res, next) => {
                     gender: req.body.gender,
                     password: hassed_password,
                     image: req.body.image,
+                    country_code : req.body.country_code,
                     phone: req.body.phone
                 }
                 const new_user = await User.create(payload);
