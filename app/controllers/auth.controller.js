@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const stripe = require('stripe')(process.env.STRIPE_SK);
+const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 const { Op } = require('@sequelize/core');
 
 // Import models.
@@ -294,60 +295,122 @@ exports.refreshToken = (req, res, next) => {
 
 }
 
-let forVerify = {};
-
 /*
  * Generate OTP for phone number verificatio.
 */
-exports.generateOTP = (req, res, next) => {
+exports.generateOTP = async (req, res, next) => {
+    const country_code = req.body.country_code
+    const number = req.body.phone_number;
 
-    const MOBILE = req.body.mobile;
+    // Send OTP through twilio.
+    try {
+        const otp = await client
+            .verify
+            .services(process.env.SERVICE_ID)
+            .verifications
+            .create({
+                to: `${country_code}${number}`,
+                channel: req.body.channel
+            });
 
-    // Generate OTP.
-    const OTP = Math.floor(1000 + (9999 - 1000) * Math.random());
-
-    // Store OTP locally.
-    forVerify['OTP'] = OTP;
-    forVerify['MOBILE'] = MOBILE;
-
-    // Sending response.
-    return res.status(200).json({
-        message: 'OPT generated successfully..',
-        data: {
-            mobile: MOBILE,
-            OTP: OTP
+        // Send success response.
+        return res.status(200).json({ message: "OTP sent Successfuly", status: 1 });
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
         }
-    });
-
+        next(err);
+    }
 }
-
 
 /*
- * Verify OTP.
+* Verify OTP.
 */
-exports.verifyOTP = (req, res, next) => {
+exports.verifyOTP = async (req, res, next) => {
+    const country_code = req.body.country_code
+    const number = req.body.phone_number;
 
-    const otp = forVerify.OTP;
-    const mobile = forVerify.MOBILE;
+    // Verify OTP.
+    try {
+        const otp = await client
+            .verify
+            .services(process.env.SERVICE_ID)
+            .verificationChecks
+            .create({
+                to: `${country_code}${number}`,
+                code: req.body.otp
+            });
 
-    // Chech whether OTP is match or not. 
-    if (req.body.OTP === otp && req.body.mobile === mobile) {
-        forVerify = {};
-
-        // Sending success response.
-        return res.status(200).json({
-            message: 'Mobile number varifed.'
-        });
+        // Chech whether OTP is match or not.
+        if (otp.valid == true) {
+            return res.status(200).json({ message: "Mobile Number verified!", status: 1 });
+        } else {
+            return res.status(400).json({ error: "Invalid OTP entered!", status: 0 })
+        }
     }
-    else {
-
-        //Sending failed response.
-        return res.status(200).json({
-            erroMessage: 'Invalid OTP!'
-        });
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
     }
-
 }
+
+// let forVerify = {};
+
+// /*
+//  * Generate OTP for phone number verificatio.
+// */
+// exports.generateOTP = (req, res, next) => {
+
+//     const MOBILE = req.body.mobile;
+
+//     // Generate OTP.
+//     const OTP = Math.floor(1000 + (9999 - 1000) * Math.random());
+
+//     // Store OTP locally.
+//     forVerify['OTP'] = OTP;
+//     forVerify['MOBILE'] = MOBILE;
+
+//     // Sending response.
+//     return res.status(200).json({
+//         message: 'OPT generated successfully..',
+//         data: {
+//             mobile: MOBILE,
+//             OTP: OTP
+//         }
+//     });
+
+// }
+
+
+// /*
+//  * Verify OTP.
+// */
+// exports.verifyOTP = (req, res, next) => {
+
+//     const otp = forVerify.OTP;
+//     const mobile = forVerify.MOBILE;
+
+//     // Chech whether OTP is match or not. 
+//     if (req.body.OTP === otp && req.body.mobile === mobile) {
+//         forVerify = {};
+
+//         // Sending success response.
+//         return res.status(200).json({
+//             message: 'Mobile number varifed.'
+//         });
+//     }
+//     else {
+
+//         //Sending failed response.
+//         return res.status(200).json({
+//             erroMessage: 'Invalid OTP!'
+//         });
+//     }
+
+// }
 
 
 /*
@@ -458,7 +521,8 @@ exports.getNewPassword = async (req, res, next) => {
         where: {
             resetToken: token,
             resetTokenExpiration: { [Op.gt]: Date.now() }
-        } })
+        }
+    })
         .then(user => {
             res.render('auth/new-password', {
                 path: '/new-password',

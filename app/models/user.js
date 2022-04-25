@@ -42,6 +42,9 @@ const User = sequelize.define('user', {
         type: Sequelize.STRING(100),
         defaultValue: null
     },
+    country_code: {
+        type: Sequelize.STRING
+    },
     phone: {
         type: Sequelize.BIGINT(20),
         defaultValue: null
