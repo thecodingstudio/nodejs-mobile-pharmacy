@@ -63,7 +63,7 @@ app.use((error, req, res, next) => {
 
 // Difine simple route.
 app.get("/", (req, res) => {
-    res.status(200).send('Welcome to Mobile Pharmacy App APIs..................');
+    res.status(200).send('Welcome to Mobile Pharmacy App APIs..');
 });
 
 // Define models relationship.
