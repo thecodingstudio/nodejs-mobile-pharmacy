@@ -3,7 +3,7 @@
 API end-points for `Mobile Pharmacy` App.
 - [AWS](http://ec2-35-170-196-39.compute-1.amazonaws.com:8000).
 - [Herou](https://mobile-pharmacy.herokuapp.com/).
-- [Jenkins](http://ec2-35-170-196-39.compute-1.amazonaws.com:8080/).
+- [Jenkins pipeline](http://ec2-35-170-196-39.compute-1.amazonaws.com:8080/).
 
 ## Installation
 
