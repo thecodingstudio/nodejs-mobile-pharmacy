@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
     res.status(200).send('Welcome to Mobile Pharmacy App APIs..');
 });
 
-// Define models relationship.
+// Define models and it's relationship.
 const User = require('./app/models/user');
 const Store = require('./app/models/store');
 const Token = require('./app/models/app_token');
