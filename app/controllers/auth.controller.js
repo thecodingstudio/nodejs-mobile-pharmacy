@@ -415,7 +415,7 @@ exports.verifyOTP = async (req, res, next) => {
 
 
 /*
- * Nodenaike transporter to sending mail.
+ * Nodemaile transporter to sending mail.
 */
 const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
@@ -609,7 +609,7 @@ exports.postNewPassword = (req, res, next) => {
 exports.changePassword = (req, res, body) => {
 
     // Find user who send request.
-    User.findOne({ where: { email: req.body.email } })
+    User.findOne({ where: { id: req.user.id } })
         .then(async user => {
 
             // Cheak Whether user exist or not.
