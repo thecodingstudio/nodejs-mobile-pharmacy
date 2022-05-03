@@ -606,7 +606,7 @@ exports.postNewPassword = (req, res, next) => {
 /*
  * Change password through current password.
 */
-exports.changePassword = (req, res, body) => {
+exports.changePassword = (req, res, next) => {
 
     // Find user who send request.
     User.findOne({ where: { id: req.user.id } })
