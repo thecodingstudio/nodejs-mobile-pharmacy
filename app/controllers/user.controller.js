@@ -119,13 +119,23 @@ exports.updateProfile = (req, res, next) => {
 */
 exports.postAddress = async (req, res, next) => {
 
+    if(req.user.role === 2) {
+        const address = Address.findOne({where : {userId : req.user.id}});
+
+        if(address) {
+            return res.status(401).json({
+                ErrorMessage : "You are not alignable to add more then one address.",
+                Description : 'Now you can update and delete your address only.'
+            });
+        }
+    }
+
     const payload = {
         primary_address: req.body.primary_address,
         addition_address_info: req.body.addition_address_info,
         address_type: req.body.address_type || 0,
         latitude: req.body.latitude || 21.228125,
         longitude: req.body.longitude || 72.833771,
-        is_select : req.body.is_select,
         userId: req.user.id
     }
 
