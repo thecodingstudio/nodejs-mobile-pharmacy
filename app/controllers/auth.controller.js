@@ -43,7 +43,7 @@ exports.Register = (req, res, next) => {
                     gender: req.body.gender,
                     password: hassed_password,
                     image: "https://res.cloudinary.com/dobanpo5b/image/upload/v1651644359/4c669277dd99_Man.jpg_sub_category.jpg",
-                    country_code : req.body.country_code,
+                    country_code: req.body.country_code,
                     phone: req.body.phone
                 }
                 const new_user = await User.create(payload);
@@ -82,7 +82,8 @@ exports.Register = (req, res, next) => {
                                     id: new_user.id,
                                     name: new_user.name,
                                     store_name: new_store.store_name,
-                                    pharmacy_id: new_store.pharmacy_id
+                                    pharmacy_id: new_store.pharmacy_id,
+
                                 }
                             });
                         }
@@ -180,7 +181,7 @@ exports.Login = (req, res, next) => {
 
                 // Store token data in database
                 try {
-
+                    const store = await Store.findOne({ where: { userId: user.id } });
                     const token = await Token.findOne({ where: { userId: user.id } });
 
                     // Chech whether token exist or not.
@@ -196,19 +197,50 @@ exports.Login = (req, res, next) => {
 
                             await token.save();
 
+                            if (user.role === 2) {
+                                // Sending success response.
+                                return res.status(200).json({
+                                    message: 'Logged-in successfully..',
+                                    token: accessToken,
+                                    refreshToken: refreshToken,
+                                    access_count: token.access_count,
+                                    user: {
+                                        id: user.id,
+                                        role: user.role,
+                                        name: user.name,
+                                        email: user.email,
+                                        gender: user.gender,
+                                        image: user.image,
+                                        country_code: user.country_code,
+                                        phone: user.phone,
+                                        store_name : store.store_name,
+                                        license_id : store.license_id,
+                                        pharmacy_id : store.pharmacy_id
+                                    }
+                                });
+                            }
+
                             // Sending success response.
                             return res.status(200).json({
                                 message: 'Logged-in successfully..',
-                                data: {
+                                token: accessToken,
+                                refreshToken: refreshToken,
+                                access_count: token.access_count,
+                                user: {
+                                    id: user.id,
                                     role: user.role,
                                     name: user.name,
-                                    token: accessToken,
-                                    refreshToken: refreshToken
+                                    email: user.email,
+                                    gender: user.gender,
+                                    image: user.image,
+                                    country_code: user.country_code,
+                                    phone: user.phone
                                 }
                             });
 
                         }
                         catch (err) {
+                            console.log(err);
                             const error = new Error('Token Updation Failed!');
                             error.statusCode = 404;
                             throw error;
@@ -228,18 +260,50 @@ exports.Login = (req, res, next) => {
                     // Crete app_token if user is login first time.
                     await Token.create(payload);
 
+                    if (user.role === 2) {
+                        // Sending success response.
+                        return res.status(200).json({
+                            message: 'Logged-in successfully..',
+                            token: accessToken,
+                            refreshToken: refreshToken,
+                            access_count: payload.access_count,
+                            user: {
+                                id: user.id,
+                                role: user.role,
+                                name: user.name,
+                                email: user.email,
+                                gender: user.gender,
+                                image: user.image,
+                                country_code: user.country_code,
+                                phone: user.phone,
+                                store_name : store.store_name,
+                                license_id : store.license_id,
+                                pharmacy_id : store.pharmacy_id
+                            }
+                        });
+                    }
+
                     // Sending success response.
                     return res.status(200).json({
-                        message: 'Logged-in successfully',
-                        data: {
+                        message: 'Logged-in successfully..',
+                        token: accessToken,
+                        refreshToken: refreshToken,
+                        access_count: token.access_count,
+                        user: {
+                            id: user.id,
+                            role: user.role,
                             name: user.name,
-                            token: accessToken,
-                            refreshToken: refreshToken
+                            email: user.email,
+                            gender: user.gender,
+                            image: user.image,
+                            country_code: user.country_code,
+                            phone: user.phone
                         }
                     });
 
                 }
                 catch (err) {
+                    console.log(err);
                     const error = new Error('Login Failed!');
                     error.statusCode = 404;
                     throw error;
@@ -247,6 +311,7 @@ exports.Login = (req, res, next) => {
 
             }
             catch (err) {
+                console.log(err);
                 const error = new Error('Login Failed!');
                 error.statusCode = 404;
                 throw error;
