@@ -82,7 +82,7 @@ exports.getNearByPharmacy = (req, res, next) => {
                     // Push store data and distrnce to store_list.
                     store_lisrt.push({
                         id: stores[i].id,
-                        store_logo: stores[i].store_logo,
+                        store_image: stores[i].store_image,
                         store_name: stores[i].store_name,
                         address: address.primary_address,
                         distance: Math.round(d * 100) / 100
