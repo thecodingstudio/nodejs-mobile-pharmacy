@@ -7,7 +7,7 @@ const paymentController = require('../controllers/payment.controller');
 
 router.use(cors());
 
-router.get('/getNearByPharmacy', authUser, customerController.getNearByPharmacy);
+router.get('/getNearByPharmacy/:id', authUser, customerController.getNearByPharmacy);
 
 router.post('/createPrescription', authUser, customerController.createPrescription);
 

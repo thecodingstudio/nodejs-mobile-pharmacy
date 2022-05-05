@@ -34,7 +34,7 @@ exports.getNearByPharmacy = (req, res, next) => {
             let flag = false;
 
             // Fetch user's selected/current address.
-            const user = await Address.findOne({ where: { id : req.body.id} });
+            const user = await Address.findOne({ where: { id : req.params.id} });
 
             // Check whether address exist or not.
             if (!user) {
