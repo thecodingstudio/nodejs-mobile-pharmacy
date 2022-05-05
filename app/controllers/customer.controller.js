@@ -24,9 +24,9 @@ exports.getNearByPharmacy = (req, res, next) => {
         .then(async stores => {
 
             // Check whether store exist or not.
-            if(stores.length === 0){
+            if (stores.length === 0) {
                 return res.status(404).json({
-                    ErrorMessage : "No store found!"
+                    ErrorMessage: "No store found!"
                 });
             }
 
@@ -34,12 +34,12 @@ exports.getNearByPharmacy = (req, res, next) => {
             let flag = false;
 
             // Fetch user's selected/current address.
-            const user = await Address.findOne({ where: { userId: req.user.id , is_select : 1} });
+            const user = await Address.findOne({ where: { userId: req.user.id, is_select: 1 } });
 
             // Check whether address exist or not.
-            if(!user){
+            if (!user) {
                 return res.status(404).json({
-                    ErrorMessage : "Address not found!"
+                    ErrorMessage: "Address not found!"
                 });
             }
 
@@ -81,6 +81,7 @@ exports.getNearByPharmacy = (req, res, next) => {
 
                     // Push store data and distrnce to store_list.
                     store_lisrt.push({
+                        id: stores[i].id,
                         store_logo: stores[i].store_logo,
                         store_name: stores[i].store_name,
                         address: address.primary_address,
