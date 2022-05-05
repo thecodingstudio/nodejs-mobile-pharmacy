@@ -42,7 +42,7 @@ exports.Register = (req, res, next) => {
                     email: req.body.email,
                     gender: req.body.gender,
                     password: hassed_password,
-                    image: req.body.image,
+                    image: "https://res.cloudinary.com/dobanpo5b/image/upload/v1651644359/4c669277dd99_Man.jpg_sub_category.jpg",
                     country_code : req.body.country_code,
                     phone: req.body.phone
                 }
