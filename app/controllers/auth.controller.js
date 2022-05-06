@@ -213,9 +213,9 @@ exports.Login = (req, res, next) => {
                                         image: user.image,
                                         country_code: user.country_code,
                                         phone: user.phone,
-                                        store_name : store.store_name,
-                                        license_id : store.license_id,
-                                        pharmacy_id : store.pharmacy_id
+                                        store_name: store.store_name,
+                                        license_id: store.license_id,
+                                        pharmacy_id: store.pharmacy_id
                                     }
                                 });
                             }
@@ -276,9 +276,9 @@ exports.Login = (req, res, next) => {
                                 image: user.image,
                                 country_code: user.country_code,
                                 phone: user.phone,
-                                store_name : store.store_name,
-                                license_id : store.license_id,
-                                pharmacy_id : store.pharmacy_id
+                                store_name: store.store_name,
+                                license_id: store.license_id,
+                                pharmacy_id: store.pharmacy_id
                             }
                         });
                     }
