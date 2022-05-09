@@ -30,11 +30,11 @@ exports.getNearByPharmacy = (req, res, next) => {
                 });
             }
 
-            let store_lisrt = [];
+            let store_list = [];
             let flag = false;
 
             // Fetch user's selected/current address.
-            const user = await Address.findOne({ where: { id : req.params.id} });
+            const user = await Address.findOne({ where: { id: req.params.id } });
 
             // Check whether address exist or not.
             if (!user) {
@@ -80,7 +80,7 @@ exports.getNearByPharmacy = (req, res, next) => {
                 if (d < 50) {
 
                     // Push store data and distrnce to store_list.
-                    store_lisrt.push({
+                    store_list.push({
                         id: stores[i].id,
                         store_image: stores[i].store_image,
                         store_name: stores[i].store_name,
@@ -93,17 +93,21 @@ exports.getNearByPharmacy = (req, res, next) => {
 
             // Check if flag status.
             if (!flag) {
-                console.log(store_lisrt);
+                console.log(store_list);
                 return res.send({
                     message: 'No medicals found near your area!'
                 });
             }
 
+            store_list.sort(function (a, b) {
+                return a.distance - b.distance;
+            });
+
             // Send response.
             return res.send({
                 message: 'Near by medicals list',
-                data: store_lisrt,
-                total_store: store_lisrt.length
+                data: store_list,
+                total_store: store_list.length
             });
 
         })

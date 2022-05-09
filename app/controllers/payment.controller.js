@@ -108,11 +108,11 @@ exports.checkout = async (req, res, next) => {
             // Check whether order already exist or not.
             Order.findOne({ where: { quoteId: quote.id } })
                 .then(async check => {
-                    // if (check !== null) {
-                    //     if (check.status === 0 || check.status === 1 || check.status === 2) {
-                    //         return res.status(409).json({ ErrorMessage: 'Order already exisit!' });
-                    //     }
-                    // }
+                    if (check !== null) {
+                        if (check.status === 0 || check.status === 1 || check.status === 2) {
+                            return res.status(409).json({ ErrorMessage: 'Order already exisit!' });
+                        }
+                    }
 
                     // If oreder not exist then create new address.
                     const order = await Order.create(order_payload);
@@ -144,7 +144,7 @@ exports.checkout = async (req, res, next) => {
                                 payment_method_types: ['card'],
                                 description: 'Pay for medicine',
                                 receipt_email: user.email_id,
-                                amount: parseFloat(amount) * 100,
+                                amount: parseFloat(order.amount) * 100,
                                 currency: 'usd',
                                 customer: user.stripe_id,
                                 payment_method: cards.id
