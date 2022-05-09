@@ -99,7 +99,7 @@ exports.getNearByPharmacy = (req, res, next) => {
                 });
             }
 
-            store_list.sort(function (a, b) {
+            store_list.sort((a, b) => {
                 return a.distance - b.distance;
             });
 
