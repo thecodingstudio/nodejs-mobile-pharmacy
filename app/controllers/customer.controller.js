@@ -11,6 +11,7 @@ const Prescription_image = require('../models/prescription_image');
 
 const notification = require('../services/notification');
 const path = require('path');
+const { Op, or } = require("sequelize");
 
 
 /*
