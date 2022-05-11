@@ -23,7 +23,7 @@ exports.getNearByPharmacy = (req, res, next) => {
     // Check user is customer or not.
     if (req.user.role === 2) {
         return res.status(400).json({
-            ErrorMessage: 'Pharmacist can not create prescription!'
+            ErrorMessage: 'Pharmacist can not access this routes!'
         })
     }
 
@@ -140,7 +140,7 @@ exports.createPrescription = async (req, res, next) => {
     // Check user is customer or not.
     if (req.user.role === 2) {
         return res.status(400).json({
-            ErrorMessage: 'Pharmacist can not create prescription!'
+            ErrorMessage: 'Pharmacist can not access this routes!'
         })
     }
 
@@ -301,7 +301,7 @@ exports.getPrescriptionsList = async (req, res, next) => {
     // Check whether user is customer or not.
     if (req.user.role === 2) {
         return res.status(400).json({
-            ErrorMessage: 'Pharmacist can not create prescription!'
+            ErrorMessage: 'Pharmacist can not access this routes!'
         });
     }
 
@@ -378,7 +378,7 @@ exports.deletePrescription = (req, res, next) => {
     // Check user is customer or not.
     if (req.user.role === 2) {
         return res.status(400).json({
-            ErrorMessage: 'Pharmacist can not create prescription!'
+            ErrorMessage: 'Pharmacist can not access this routes!'
         })
     }
 

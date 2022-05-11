@@ -19,7 +19,7 @@ exports.getRequests = async (req, res, next) => {
     // Check user is customer or not.
     if (req.user.role === 1) {
         return res.status(400).json({
-            ErrorMessage: 'Customer can not create prescription!'
+            ErrorMessage: 'Customer can not access this routes!'
         })
     }
 
@@ -99,7 +99,7 @@ exports.addQuote = async (req, res, next) => {
     // Check user is customer or not.
     if (req.user.role === 1) {
         return res.status(400).json({
-            ErrorMessage: 'Customer can not create prescription!'
+            ErrorMessage: 'Customer can not access this routes!'
         })
     }
 
@@ -262,7 +262,7 @@ exports.changeOrderStatus = async (req, res, next) => {
     // Check user is customer or not.
     if (req.user.role === 1) {
         return res.status(400).json({
-            ErrorMessage: 'Customer can not create prescription!'
+            ErrorMessage: 'Customer can not access this routes!'
         })
     }
 
