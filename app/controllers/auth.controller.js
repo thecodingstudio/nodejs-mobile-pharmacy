@@ -54,7 +54,7 @@ exports.Register = (req, res, next) => {
                         const payload = {
                             store_name: req.body.store_name,
                             license_id: req.body.license_id,
-                            store_image: "https://res.cloudinary.com/dobanpo5b/image/upload/v1651659429/6c07ef99ca51_001-lychee-2.png_sub_category.png",
+                            store_image: "https://res.cloudinary.com/dobanpo5b/image/upload/v1652259888/FreeVector-Medical-Icon_qwl0xv.jpg",
                             userId: new_user.id
                         }
 
