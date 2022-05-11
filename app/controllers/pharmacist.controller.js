@@ -16,6 +16,12 @@ const notification = require('../services/notification');
  * Send full object of requests.
 */
 exports.getRequests = async (req, res, next) => {
+    // Check user is customer or not.
+    if (req.user.role === 1) {
+        return res.status(400).json({
+            ErrorMessage: 'Customer can not create prescription!'
+        })
+    }
 
     // Pagination logic
     const currentPage = req.query.page || 1;
@@ -89,6 +95,13 @@ exports.getRequests = async (req, res, next) => {
  * Send notification to user.
 */
 exports.addQuote = async (req, res, next) => {
+
+    // Check user is customer or not.
+    if (req.user.role === 1) {
+        return res.status(400).json({
+            ErrorMessage: 'Customer can not create prescription!'
+        })
+    }
 
     // Fetch store details for logged-In user.
     const store = await Store.findOne({ where: { userId: req.user.id } });
@@ -246,6 +259,12 @@ exports.collect_payment_offline = async (req, res, next) => {
  * Send notification to customer.
 */
 exports.changeOrderStatus = async (req, res, next) => {
+    // Check user is customer or not.
+    if (req.user.role === 1) {
+        return res.status(400).json({
+            ErrorMessage: 'Customer can not create prescription!'
+        })
+    }
 
     // Fetch order and payment status.
     const order = await Order.findOne({ where: { quoteId: req.body.quoteId } });

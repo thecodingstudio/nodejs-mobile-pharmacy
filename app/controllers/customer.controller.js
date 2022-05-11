@@ -20,6 +20,13 @@ const { Op, or } = require("sequelize");
 */
 exports.getNearByPharmacy = (req, res, next) => {
 
+    // Check user is customer or not.
+    if (req.user.role === 2) {
+        return res.status(400).json({
+            ErrorMessage: 'Pharmacist can not create prescription!'
+        })
+    }
+
     // Find all active pharmacy store.
     Store.findAll({ where: { is_active: '1' } })
         .then(async stores => {
@@ -367,6 +374,13 @@ exports.getPrescriptionsList = async (req, res, next) => {
  * Delete user's pending prescription.
 */
 exports.deletePrescription = (req, res, next) => {
+
+    // Check user is customer or not.
+    if (req.user.role === 2) {
+        return res.status(400).json({
+            ErrorMessage: 'Pharmacist can not create prescription!'
+        })
+    }
 
     // Find prescription through it's id.
     Prescription.findOne({ where: { id: req.params.id } })
