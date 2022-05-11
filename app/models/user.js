@@ -39,7 +39,7 @@ const User = sequelize.define('user', {
         }
     },
     image: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.TEXT,
         defaultValue: null
     },
     country_code: {

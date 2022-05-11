@@ -8,7 +8,7 @@ const Prescription_image = sequelize.define('prescription_image', {
         allowNull: false
     },
     url: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.TEXT,
         allowNull: false
     },
     type : {

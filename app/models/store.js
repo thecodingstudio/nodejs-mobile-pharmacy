@@ -9,7 +9,7 @@ const Store = sequelize.define('store', {
         allowNull: false
     },
     store_image: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.TEXT,
         defaultValue: null
     },
     license_id: {
