@@ -90,6 +90,7 @@ Medicine.belongsTo(Prescription, { constraints: true, onDelete: 'CASCADE' });
 Prescription.hasMany(Medicine);
 Notification.belongsTo(User);
 Store.hasMany(Quote, { constraints: true, onDelete: 'CASCADE' });
+Quote.belongsTo(Prescription);
 Prescription.hasMany(Quote);
 Order.belongsTo(User, { foreignKey: 'userId', targetKey: 'id' });
 Order.belongsTo(Store, { foreignKey: 'storeId', targetKey: 'id' });

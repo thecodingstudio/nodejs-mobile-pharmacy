@@ -51,13 +51,13 @@ exports.getRequests = async (req, res, next) => {
 
         // Push medicine details to medicine_list array.
         for (let i = 0; i < medicals.length; i++) {
-            medicine_list.push(medicals[i].dataValues.name);
+            medicine_list.push(medicals[i].name);
         }
 
         // Fetch all images of prescription and push to images_list array.
         const images = await Prescription_image.findAll({ where: { prescriptionId: requets[i].dataValues.id } });
         for (let i = 0; i < images.length; i++) {
-            images_list.push(images[i].dataValues.path);
+            images_list.push(images[i].url);
         }
 
         // Push all data in object form to list for response. 

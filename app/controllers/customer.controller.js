@@ -305,7 +305,7 @@ exports.getPrescriptionsList = async (req, res, next) => {
         });
     }
 
-    
+
     // Pagination logic.
     const currentPage = req.query.page || 1;
     const perPage = 2;
@@ -326,6 +326,9 @@ exports.getPrescriptionsList = async (req, res, next) => {
                 }, {
                     model: Medicine,
                     attributes: ['id', 'name']
+                }, {
+                    model: Quote,
+                    attributes: ["id", "store_name", "price", "text_note", "storeId", "prescriptionId"]
                 }]
             });
         }
@@ -345,7 +348,7 @@ exports.getPrescriptionsList = async (req, res, next) => {
                 }]
             });
         }
-        if(prescription.length === 0){
+        if (prescription.length === 0) {
             return res.status(404).json({
                 ErrorMessage: "No more prescription"
             });
@@ -356,7 +359,7 @@ exports.getPrescriptionsList = async (req, res, next) => {
         return res.status(200).json({
             message: "Prescription fetched successfully.",
             prescription: prescription,
-            total : count.length
+            total: count.length
         });
 
     }
