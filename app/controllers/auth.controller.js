@@ -288,7 +288,7 @@ exports.Login = (req, res, next) => {
                         message: 'Logged-in successfully..',
                         token: accessToken,
                         refreshToken: refreshToken,
-                        access_count: token.access_count,
+                        access_count: payload.access_count,
                         user: {
                             id: user.id,
                             role: user.role,

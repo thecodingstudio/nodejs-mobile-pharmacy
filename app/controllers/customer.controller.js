@@ -298,79 +298,67 @@ exports.getPrescriptionsList = async (req, res, next) => {
         });
     }
 
+    
     // Pagination logic.
     const currentPage = req.query.page || 1;
     const perPage = 2;
+    const state = req.query.state
+    let prescription, count;
 
-    let result = [];
-
-    const state = req.query.state || 'current';
-
-    // Check whether prescription state current or past.
-    if (state === 'current') {
-
-        // Find all prescription with pagination logic.
-        try {
-            const current = await Prescription.findAll({
+    try {
+        if (state === 'current') {
+            count = await Prescription.findAll({ where: { userId: req.user.id, status: 0 } });
+            prescription = await Prescription.findAll({
                 offset: (currentPage - 1) * perPage,
                 limit: perPage,
-                where: { status: 0, userId: req.user.id }
+                where: { userId: req.user.id, status: 0 },
+                attributes: ["id", "name", "text_note", "status", "userId"],
+                include: [{
+                    model: Prescription_image,
+                    attributes: ['id', 'url']
+                }, {
+                    model: Medicine,
+                    attributes: ['id', 'name']
+                }]
             });
-
-            result = current
         }
-        catch (err) {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        }
-    }
-
-    // Check whether prescription state current or past.
-    if (state === 'past') {
-
-        // Find all prescription with pagination logic.
-        try {
-            const past = await Prescription.findAll({
+        else if (state === 'past') {
+            count = await Prescription.findAll({ where: { userId: req.user.id, status: { [Op.ne]: 0 } } });
+            prescription = await Prescription.findAll({
                 offset: (currentPage - 1) * perPage,
                 limit: perPage,
-                where: { status: { [Op.ne]: 0 }, userId: req.user.id }
+                where: { userId: req.user.id, status: { [Op.ne]: 0 } },
+                attributes: ["id", "name", "text_note", "status", "userId"],
+                include: [{
+                    model: Prescription_image,
+                    attributes: ['id', 'url']
+                }, {
+                    model: Medicine,
+                    attributes: ['id', 'name']
+                }]
             });
-
-            result = past
         }
-        catch (err) {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
+        if(prescription.length === 0){
+            return res.status(404).json({
+                ErrorMessage: "No more prescription"
+            });
         }
-    }
 
-    // Check prescription's result lenght.
-    if (result.length === 0) {
-        return res.status(400).json({ ErrorMessage: 'No records found!' })
-    }
 
-    let list = [];
-
-    // Push prescription data to list for reponse.
-    for (let i = 0; i < result.length; i++) {
-        list.push({
-            id: result[i].id,
-            text_note: result[i].text_note,
-            createdAt: result[i].createdAt,
+        // Send success response.
+        return res.status(200).json({
+            message: "Prescription fetched successfully.",
+            prescription: prescription,
+            total : count.length
         });
-    }
 
-    // Send success response.
-    return res.status(200).json({
-        message: "prescription list fetched successfully..",
-        data: {
-            list: list
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
         }
-    })
+        next(err);
+    }
 
 }
 
@@ -416,59 +404,6 @@ exports.deletePrescription = (req, res, next) => {
 
 }
 
-
-/*
- * Delete user's prescription.
-*/
-exports.get = async (req, res, next) => {
-
-    const presId = req.query.prescriptionId;
-    let prescription = {}, image = [], medicine = [], quote = [];
-
-    try {
-        // Fetch prescription all images and Push all fetched images to image array.
-        const images = await Prescription_image.findAll({ where: { prescriptionId: presId } });
-        for (let i = 0; i < images.length; i++) {
-            image.push({ url: images[i].path });
-        }
-
-        // Fetch prescription all medicine and Push all fetched medicine to medicine array.
-        const medicines = await Medicine.findAll({ where: { prescriptionId: presId } });
-        for (let i = 0; i < medicines.length; i++) {
-            medicine.push({ name: medicines[i].name });
-        }
-
-        // Fetch prescription all quote with required data and Push all fetched quote data to quote array.
-        const quotes = await Quote.findAll({ where: { prescriptionId: presId } });
-        for (let i = 0; i < quotes.length; i++) {
-            quote.push({
-                id: quotes[i].id,
-                store_name: quotes[i].store_name,
-                text_note: quotes[i].text_note,
-                price: quotes[i].price,
-                createdAt: quotes[i].createdAt
-            });
-        }
-
-        // Push all prescription data to prescription object.
-        prescription.images = image;
-        prescription.list_of_medicine = medicine;
-        prescription.pharmacist_replied = quote
-
-        // Send success response.
-        return res.status(200).json({
-            message: "Prescription fetched successfully.",
-            data: prescription
-        });
-
-    }
-    catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500;
-        }
-        next(err);
-    }
-}
 
 /*
  * To delete image from server.
