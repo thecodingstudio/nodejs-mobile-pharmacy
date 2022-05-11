@@ -319,7 +319,7 @@ exports.getPrescriptionsList = async (req, res, next) => {
                 offset: (currentPage - 1) * perPage,
                 limit: perPage,
                 where: { userId: req.user.id, status: 0 },
-                attributes: ["id", "name", "text_note", "status", "userId"],
+                attributes: ["id", "name", "text_note", "status", "userId", "createdAt"],
                 include: [{
                     model: Prescription_image,
                     attributes: ['id', 'url']
@@ -328,7 +328,7 @@ exports.getPrescriptionsList = async (req, res, next) => {
                     attributes: ['id', 'name']
                 }, {
                     model: Quote,
-                    attributes: ["id", "store_name", "price", "text_note", "storeId", "prescriptionId"]
+                    attributes: ["id", "store_name", "price", "text_note", "storeId", "prescriptionId", "createdAt"]
                 }]
             });
         }
@@ -338,13 +338,16 @@ exports.getPrescriptionsList = async (req, res, next) => {
                 offset: (currentPage - 1) * perPage,
                 limit: perPage,
                 where: { userId: req.user.id, status: { [Op.ne]: 0 } },
-                attributes: ["id", "name", "text_note", "status", "userId"],
+                attributes: ["id", "name", "text_note", "status", "userId", "createdAt"],
                 include: [{
                     model: Prescription_image,
                     attributes: ['id', 'url']
                 }, {
                     model: Medicine,
                     attributes: ['id', 'name']
+                }, {
+                    model: Quote,
+                    attributes: ["id", "store_name", "price", "text_note", "storeId", "prescriptionId", "createdAt"]
                 }]
             });
         }
