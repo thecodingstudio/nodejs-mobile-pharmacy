@@ -119,33 +119,30 @@ exports.updateProfile = (req, res, next) => {
 */
 exports.postAddress = async (req, res, next) => {
 
-    if(req.user.role === 2) {
-        const address = await Address.findOne({where : {userId : req.user.id}});
-        console.log(address);
-        if(address) {
-            return res.status(401).json({
-                ErrorMessage : "You are not alignable to add more then one address.",
-                Description : 'Now you can update and delete your address only.'
-            });
-        }
-    }
-
     const payload = {
         primary_address: req.body.primary_address,
         addition_address_info: req.body.addition_address_info,
         address_type: req.body.address_type || 0,
         latitude: req.body.latitude || 21.228125,
         longitude: req.body.longitude || 72.833771,
+        is_select: req.body.is_select || 0,
         userId: req.user.id
     }
 
     // Create new address in database.
     try {
+        if (payload.is_select === 1) {
+            const address = await Address.findOne({ where: { userId: req.user.id, is_select: 1 } });
+            if (address) {
+                address.is_select = 0;
+                await address.save();
+            }
+        }
         const address = await Address.create(payload);
 
         return res.status(200).json({
             message: 'Address added successfully',
-            data: address
+            data: payload
         });
 
     }
@@ -185,6 +182,14 @@ exports.updateAddress = (req, res, next) => {
                 address.longitude = req.body.longitude || address.longitude;
                 address.is_select = req.body.is_select || address.is_select;
 
+                if (req.body.is_select === 1) {
+                    const address = await Address.findOne({ where: { userId: req.user.id, is_select: 1 } });
+                    if (address) {
+                        address.is_select = 0;
+                        await address.save();
+                    }
+                }
+
                 // save updated address.
                 await address.save();
 
@@ -193,7 +198,7 @@ exports.updateAddress = (req, res, next) => {
                     data: address
                 });
 
-            } 
+            }
             catch (err) {
                 const error = new Error('Address not updated!');
                 error.statusCode = 404;
@@ -233,7 +238,7 @@ exports.deleteAddress = (req, res, next) => {
                 return res.status(200).json({
                     message: 'Address deleted successfully!'
                 });
-            } 
+            }
             catch (err) {
                 const error = new Error('Address not deleted!\n' + err);
                 error.statusCode = 400;
@@ -280,5 +285,5 @@ exports.getAddress = (req, res, next) => {
             }
             next(err);
         });
-        
+
 }

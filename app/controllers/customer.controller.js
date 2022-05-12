@@ -42,12 +42,12 @@ exports.getNearByPharmacy = (req, res, next) => {
             let flag = false;
 
             // Fetch user's selected/current address.
-            const user = await Address.findOne({ where: { id: req.params.id } });
+            const user = await Address.findOne({ where: { userId: req.user.id, is_select: 1 } });
 
             // Check whether address exist or not.
             if (!user) {
                 return res.status(404).json({
-                    ErrorMessage: "Address not found!"
+                    ErrorMessage: "Address not found, Please add address and select it!"
                 });
             }
 
@@ -59,7 +59,7 @@ exports.getNearByPharmacy = (req, res, next) => {
             for (i = 0; i < stores.length; i++) {
 
                 // Fetch pharmacy store's address.
-                const address = await Address.findOne({ where: { userId: stores[i].userId } });
+                const address = await Address.findOne({ where: { userId: stores[i].userId , is_select : 1} });
 
                 // Store's latitude and longitude.
                 let store_latitude = address.latitude;

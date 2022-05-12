@@ -17,15 +17,20 @@ const Address = sequelize.define('address', {
         defaultValue: 0,
         comment: '0 = Home, 1  = Office, 2 = Location'
     },
-    latitude : {
-        type : Sequelize.STRING,
+    latitude: {
+        type: Sequelize.STRING,
         allowNull: false,
-        defaultValue : 21.228125
+        defaultValue: 21.228125
     },
-    longitude : {
-        type : Sequelize.STRING,
+    longitude: {
+        type: Sequelize.STRING,
         allowNull: false,
-        defaultValue : 72.833771
+        defaultValue: 72.833771
+    },
+    is_select: {
+        type: Sequelize.TINYINT(1),
+        allowNull: false,
+        defaultValue: 0
     },
     is_test: {
         type: Sequelize.TINYINT(1),
