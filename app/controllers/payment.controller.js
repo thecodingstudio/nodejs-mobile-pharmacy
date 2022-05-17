@@ -251,3 +251,15 @@ exports.checkout = async (req, res, next) => {
         });
     }
 }
+
+exports.getOrderStatus = async (req, res, next) => {
+    try {
+        if(!req.query.orderId){
+            return res.status(400).json({ ErrorMessage: 'OrderId can not be null', status: 0 });
+        }
+        const order = await Order.findByPk(req.query.orderId);
+        return res.status(200).json({ message: 'Order status fetched successfully.', order_status: order.status, status: 1 });
+    } catch (error) {
+        next(error);
+    }
+}

@@ -181,71 +181,77 @@ exports.collect_payment_offline = async (req, res, next) => {
     // Find order through orderId.
     try {
         const order = await Order.findByPk(req.body.orderId);
-
+        console.log(order);
         // Make order status as in-progress
-        order.status = 1;
+        if (order.checkout_type === 0 || order.checkout_type === 1) {
+            order.status = 3;
+        } else {
+            order.status = 2;
+        }
+
         await order.save();
 
         const payment = await Payment.findOne({ where: { orderId: order.id } });
 
         // Check whether payment is already done or not.
-        if (payment.status !== 'SUCCESS') {
+        // if (payment.status !== 'SUCCESS') {
 
-            payment.status = 'SUCCESS'
-            await payment.save();
+        payment.status = 'SUCCESS'
+        await payment.save();
 
-            // Send push notification to customer.
-            const message_notification = {
-                notification: {
-                    title: 'Payment Status',
-                    body: 'Payment done successfully.'
-                }
-            };
-            try {
+        // Send push notification to customer.
+        const message_notification = {
+            notification: {
+                title: 'Payment Status',
+                body: 'Payment done successfully.'
+            }
+        };
+        try {
 
-                // Find customer device token to send notification.
-                const cusromer = await User.findByPk(payment.userId);
+            // Find customer device token to send notification.
+            const cusromer = await User.findByPk(payment.userId);
 
-                const registrationToken = await Token.findOne({ where: { userId: cusromer.id } });
+            const registrationToken = await Token.findOne({ where: { userId: cusromer.id } });
 
-                // Send notification.
-                notification.createNotification(registrationToken.device_token, message_notification);
-                const payload = {
-                    sender: req.user.name,
-                    title: 'Payment Status',
-                    body: 'Payment done successfully.',
-                    receiver: cusromer.store_name
-                }
-
-                // Store notification. 
-                await Notification.create(payload);
-
-            } 
-            catch (error) {
-                return res.status(400).json({ ErrorMessage : "Notification sending failed!"});
+            // Send notification.
+            notification.createNotification(registrationToken.device_token, message_notification);
+            const payload = {
+                sender: req.user.name,
+                title: 'Payment Status',
+                body: 'Payment done successfully.',
+                receiver: cusromer.name
             }
 
-            const response_data = {
-                orderId: payment.orderId,
-                amount: payment.amount,
-                order_status: order.status,
-                payment_status: payment.status
-            };
+            // Store notification. 
+            await Notification.create(payload);
 
-            // Send success response.
-            return res.status(200).json({
-                message: 'Payment done successfully.',
-                data: response_data
-            });
-
-        } 
-        else {
-            return res.status(409).json({
-                message: 'Payment already done.'
-            });
+        }
+        catch (error) {
+            console.log(error);
+            return res.status(400).json({ ErrorMessage: "Notification sending failed!" });
         }
 
-    } 
+        const response_data = {
+            orderId: payment.orderId,
+            amount: payment.amount,
+            order_status: order.status,
+            payment_status: payment.status
+        };
+
+        // Send success response.
+        return res.status(200).json({
+            message: 'Payment done successfully.',
+            data: response_data
+        });
+
+        // } 
+        // else {
+        //     return res.status(409).json({
+        //         message: 'Payment already done.'
+        //     });
+        // }
+
+    }
     catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;

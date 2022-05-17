@@ -9,7 +9,8 @@ const Order = sequelize.define('order', {
     },
     status: {
         type: Sequelize.TINYINT(1),
-        defaultValue: 0
+        defaultValue: 0,
+        comment :'0 = ordered, 1 = in-progress, 2 = delivered 3 = picked up, 4=cancelled'
     },
     checkout_type : {
         type: Sequelize.TINYINT(1),

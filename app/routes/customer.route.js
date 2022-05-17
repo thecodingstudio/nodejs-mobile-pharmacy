@@ -17,6 +17,8 @@ router.delete('/deletePrescription/:id', customerController.deletePrescription);
 
 router.post('/checkout', authUser, paymentController.checkout);
 
+router.get('/getOrderStatus', authUser, paymentController.getOrderStatus);
+
 router.post('/addCard',authUser, paymentController.addCard);
 
 router.get('/getCard', authUser, paymentController.getCard);
