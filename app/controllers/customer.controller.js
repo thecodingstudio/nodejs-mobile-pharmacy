@@ -499,7 +499,8 @@ exports.getNearByPharmacyV1 = (req, res, next) => {
                         store_name: stores[i].store_name,
                         address: address.primary_address,
                         distance: Math.round(d * 100) / 100,
-                        store : stores[i]
+                        store : stores[i],
+                        address : address
                     });
                 }
                 flag = true;
