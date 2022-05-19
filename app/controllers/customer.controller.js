@@ -59,7 +59,7 @@ exports.getNearByPharmacy = (req, res, next) => {
             for (i = 0; i < stores.length; i++) {
 
                 // Fetch pharmacy store's address.
-                const address = await Address.findOne({ where: { userId: stores[i].userId , is_select : 1} });
+                const address = await Address.findOne({ where: { userId: stores[i].userId, is_select: 1 } });
 
                 // Store's latitude and longitude.
                 let store_latitude = address.latitude;
@@ -431,4 +431,104 @@ exports.deletePrescription = (req, res, next) => {
 const clearImage = filePath => {
     filePath = path.join(__dirname, '..', filePath);
     fs.unlink(filePath, err => console.log(err));
+}
+
+
+exports.getNearByPharmacyV1 = (req, res, next) => {
+    // Check user is customer or not.
+    if (req.user.role === 2) {
+        return res.status(400).json({
+            ErrorMessage: 'Pharmacist can not access this routes!'
+        })
+    }
+
+    // Find all active pharmacy store.
+    Store.findAll({ where: { is_active: '1' } })
+        .then(async stores => {
+
+            // Check whether store exist or not.
+            if (stores.length === 0) {
+                return res.status(404).json({
+                    ErrorMessage: "No store found!"
+                });
+            }
+
+            let store_list = [];
+            let flag = false;
+
+            // user's latitude and longitude.
+            let user_latitude = req.query.latitude;
+            let user_longitude = req.query.longitude;
+
+            // Push pharmacy store with required data.
+            for (i = 0; i < stores.length; i++) {
+
+                // Fetch pharmacy store's address.
+                const address = await Address.findOne({ where: { userId: stores[i].userId, is_select: 1 } });
+
+                // Store's latitude and longitude.
+                let store_latitude = address.latitude;
+                let store_longitude = address.longitude;
+
+                // Earth's redius.
+                const R = 6371; // kms
+
+                // φ, λ in radians
+                const φ1 = (user_latitude * Math.PI) / 180;
+                const φ2 = (store_latitude * Math.PI) / 180;
+
+                // Difference of φ and λ in radians
+                const Δφ = ((store_latitude - user_latitude) * Math.PI) / 180;
+                const Δλ = ((store_longitude - user_longitude) * Math.PI) / 180;
+
+                const a =
+                    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                // Distence between user's location to srote's location in km.
+                const d = R * c;
+
+                // Check whether distence is less then 50 km.
+                if (d < 50) {
+
+                    // Push store data and distrnce to store_list.
+                    store_list.push({
+                        id: stores[i].id,
+                        store_image: stores[i].store_image,
+                        store_name: stores[i].store_name,
+                        address: address.primary_address,
+                        distance: Math.round(d * 100) / 100,
+                        store : stores[i]
+                    });
+                }
+                flag = true;
+            }
+
+            // Check if flag status.
+            if (!flag) {
+                console.log(store_list);
+                return res.send({
+                    message: 'No medicals found near your area!'
+                });
+            }
+
+            store_list.sort((a, b) => {
+                return a.distance - b.distance;
+            });
+
+            // Send response.
+            return res.send({
+                message: 'Near by medicals list',
+                data: store_list,
+                total_store: store_list.length
+            });
+
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
 }

@@ -9,6 +9,8 @@ router.use(cors());
 
 router.get('/getNearByPharmacy', authUser, customerController.getNearByPharmacy);
 
+router.get('/getNearByPharmacy/v1', authUser, customerController.getNearByPharmacyV1);
+
 router.post('/createPrescription', authUser, customerController.createPrescription);
 
 router.get('/getPrescriptionsList', authUser, customerController.getPrescriptionsList);
