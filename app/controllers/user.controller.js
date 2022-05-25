@@ -79,9 +79,16 @@ exports.updateProfile = (req, res, next) => {
                 throw error;
             }
 
+            if(postData.email){
+                const email = await User.findOne({where : {email : postData.email}});
+                if(email){
+                    return res.status(409).json({ErrorMessage : "Email already exist!", status : 0})
+                }
+            }
+
             // Updata user data if it is change.
             user.name = postData.name || user.name;
-            user.email = postData.newEmail || user.email;
+            user.email = postData.email || user.email;
             user.gender = postData.gender || user.gender;
             user.image = postData.image || user.image;
             user.phone = postData.phone || user.phone;
