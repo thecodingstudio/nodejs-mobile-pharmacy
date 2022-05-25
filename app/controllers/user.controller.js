@@ -84,7 +84,7 @@ exports.updateProfile = (req, res, next) => {
             user.email = postData.newEmail || user.email;
             user.gender = postData.gender || user.gender;
             user.image = postData.image || user.image;
-            user.mobile = postData.mobile || user.mobile;
+            user.phone = postData.phone || user.phone;
 
             // Chech whether user is pharmacist or not.
             if (user.role === 2) {
