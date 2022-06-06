@@ -188,10 +188,9 @@ exports.createPrescription = async (req, res, next) => {
             // Parse object to JSON.
             const parseData = JSON.parse(req.body.medicine);
 
-            // Push all medicine with required data to medicine_list. 
             for (let i in parseData) {
                 medicine_list.push({
-                    name: parseData[i],
+                    name: parseData[i].name,
                     prescriptionId: prescription.id
                 });
             }
@@ -499,8 +498,8 @@ exports.getNearByPharmacyV1 = (req, res, next) => {
                         store_name: stores[i].store_name,
                         address: address.primary_address,
                         distance: Math.round(d * 100) / 100,
-                        store : stores[i],
-                        address : address
+                        store: stores[i],
+                        address: address
                     });
                 }
                 flag = true;
