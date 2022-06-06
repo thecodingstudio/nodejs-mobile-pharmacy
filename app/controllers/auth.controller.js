@@ -36,13 +36,15 @@ exports.Register = (req, res, next) => {
             try {
                 const hassed_password = await bcrypt.hash(req.body.password, 12);
 
+
+
                 const payload = {
                     role: req.body.role,
                     name: req.body.name,
                     email: req.body.email,
                     gender: req.body.gender,
                     password: hassed_password,
-                    image: "https://res.cloudinary.com/dobanpo5b/image/upload/v1651644359/4c669277dd99_Man.jpg_sub_category.jpg",
+                    image: "https://mobile-pharmacy.herokuapp.com/" + req.files[0].path,
                     country_code: req.body.country_code,
                     phone: req.body.phone
                 }
