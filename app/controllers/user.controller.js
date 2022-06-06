@@ -95,7 +95,6 @@ exports.updateProfile = (req, res, next) => {
 
             // Chech whether user is pharmacist or not.
             if (user.role === 2) {
-                user.store_name = postData.store_name || user.store_name;
                 user.license_id = postData.license_id || user.license_id;
                 user.pharmacy_id = postData.pharmacy_id || user.pharmacy_id;
 
