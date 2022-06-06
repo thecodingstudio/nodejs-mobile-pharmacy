@@ -31,12 +31,11 @@ exports.Register = (req, res, next) => {
                 error.statusCode = 409;
                 throw error;
             }
+            console.log("hi------>", req.files);
 
             // Create user with encrypted password.
             try {
                 const hassed_password = await bcrypt.hash(req.body.password, 12);
-
-
 
                 const payload = {
                     role: req.body.role,
@@ -56,7 +55,7 @@ exports.Register = (req, res, next) => {
                         const payload = {
                             store_name: req.body.store_name,
                             license_id: req.body.license_id,
-                            store_image: "https://mobile-pharmacy.herokuapp.com/" + req.files[0].path,
+                            store_image: payload.image,
                             userId: new_user.id
                         }
 
