@@ -56,7 +56,7 @@ exports.Register = (req, res, next) => {
                         const payload = {
                             store_name: req.body.store_name,
                             license_id: req.body.license_id,
-                            store_image: "https://res.cloudinary.com/dobanpo5b/image/upload/v1652259888/FreeVector-Medical-Icon_qwl0xv.jpg",
+                            store_image: "https://mobile-pharmacy.herokuapp.com/" + req.files[0].path,
                             userId: new_user.id
                         }
 
