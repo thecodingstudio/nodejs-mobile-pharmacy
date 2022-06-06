@@ -31,19 +31,19 @@ exports.Register = (req, res, next) => {
                 error.statusCode = 409;
                 throw error;
             }
-            console.log("hi------>", req.files);
 
             // Create user with encrypted password.
             try {
                 const hassed_password = await bcrypt.hash(req.body.password, 12);
 
+                const image = "https://mobile-pharmacy.herokuapp.com/" + req.files[0].path
                 const payload = {
                     role: req.body.role,
                     name: req.body.name,
                     email: req.body.email,
                     gender: req.body.gender,
                     password: hassed_password,
-                    image: "https://mobile-pharmacy.herokuapp.com/" + req.files[0].path,
+                    image: image,
                     country_code: req.body.country_code,
                     phone: req.body.phone
                 }
@@ -55,7 +55,7 @@ exports.Register = (req, res, next) => {
                         const payload = {
                             store_name: req.body.store_name,
                             license_id: req.body.license_id,
-                            store_image: payload.image,
+                            store_image: image,
                             userId: new_user.id
                         }
 
@@ -98,6 +98,7 @@ exports.Register = (req, res, next) => {
                 }
                 catch (err) {
                     new_user.destroy();
+                    console.log(err);
                     const error = new Error('Store creation Failed!');
                     error.statusCode = 422;
                     throw error;
