@@ -90,7 +90,7 @@ exports.updateProfile = (req, res, next) => {
             user.name = postData.name || user.name;
             user.email = postData.email || user.email;
             user.gender = postData.gender || user.gender;
-            user.image = postData.image || user.image;
+            user.image = "https://mobile-pharmacy.herokuapp.com/" + req.files[0].path || user.image;
             user.phone = postData.phone || user.phone;
 
             // Chech whether user is pharmacist or not.

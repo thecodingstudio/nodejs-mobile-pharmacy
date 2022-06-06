@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 });
 
 // Parse multer request.
-app.use(multer({ storage: storage }).array('image','store_image'));
+app.use(multer({ storage: storage }).array('image'));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Parse requests of content-type - application/json
