@@ -172,7 +172,7 @@ exports.createPrescription = async (req, res, next) => {
                     // Push image in image_list
                     image_list.push({
                         name: req.files[i].originalname,
-                        url: req.files[i].path,
+                        url: "https://mobile-pharmacy.herokuapp.com/" + req.files[i].path,
                         type: req.files[i].mimetype,
                         prescriptionId: prescription.id
                     });
