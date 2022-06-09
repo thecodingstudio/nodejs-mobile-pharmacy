@@ -7,15 +7,15 @@ package-lock.json
 
 ----------------------
 # Environment Variables
-/nodemon.json
+.env
 
 ----------------------
 # Heroku deployment file
-# Procfile
+Procfile
 
 ----------------------
 # Firebase admin config
-# firebase_config.json
+firebase_config.json
 
 -----------------------
 # Docker

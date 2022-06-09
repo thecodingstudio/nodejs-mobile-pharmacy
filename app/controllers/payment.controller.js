@@ -80,7 +80,6 @@ exports.getCard = async (req, res, next) => {
     }
 }
 
-
 /*
  * Checkout.
 */
@@ -252,6 +251,9 @@ exports.checkout = async (req, res, next) => {
     }
 }
 
+/*
+ * Get order status.
+*/
 exports.getOrderStatus = async (req, res, next) => {
     try {
         if(!req.query.orderId){
